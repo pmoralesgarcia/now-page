@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="webmention" href="https://webmention.io/lifeofpablo.com/webmention" />
+	<link href="https://fonts.googleapis.com/css?family=Titillium+Web:Light:300,400,600,700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined"
+      rel="stylesheet">
+	<title>Pablo's Guestbook</title>
+
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css"> -->
+
+	<link rel="stylesheet" href="https://lifeofpablo.com/media/themes/pablo.css">
+    <link rel="stylesheet" href="css/full-width.css"/>
+    <link rel="stylesheet" href="./css/webmentions.css"/>
+
+	<link rel="stylesheet" href="https://lifeofpablo.com/css/style.css">
+<link rel="stylesheet" href="https://pabs.tech/media/css/tachyons.css">
+<script src="https://kit.fontawesome.com/2ad0b8bc3e.js" crossorigin="anonymous" type="59af9ddac99f86c35438fd7f-text/javascript"></script>
+</head>
+
+<body class="bg-washed-green">
+      
+
+<section class="mw7 center">
+    <header class="tc ph4">
+        <div class="pa4 tc">
+            <img
+                src="https://static.lifeofpablo.com/pabs-cropped.jpg"
+                class="br-100 ba h3 w3 dib" alt="avatar">
+          </div>
+          
+          
+        <h1 class="f3 f2-m f1-l fw2 black-90 mv3">
+          What is Pablo up to?
+        </h1>
+        <h2 class="f5 f4-m f3-l fw2 black-50 mt0 lh-copy">
+          This is what I have planned for the remainder of 2023.
+        </h2>
+      </header>
+
+     <div class="pa4 ph7-l mw9-l center">
+        
+      <div class="f5 f4-ns lh-copy measure">
+      <h1 class="">Adventures with Friends</h1>
+      <p class="f6 f4-ns lh-copy measure center">
+        I love making memories with friends. Now that we are older, it has become harder to see each other. Anytime we get the chance to meet up, I wanto to be there! 
+        
+      </p>
+      </div>
+  
+      <div class="f5 f4-ns lh-copy measure">
+        <h1>Blogging</h1>
+        <p class="f6 f4-ns lh-copy measure center">
+        I want to become a better blogger by becoming a better writer. I started my blog again after a few years of not posting. I want to be able to express myself. 
+        </p>
+      </div>
+    
+
+      <div class="f5 f4-ns lh-copy measure">
+        <h1>Goals</h1>
+I want to be able to love myself more as a person. I want to keep finding the person I always envisioned. I want to treat my body better. I want to find more purpose. 
+      </div>
+      </div>
+
+
+
+<script>
+    var target_url = "https://lifeofpablo.com/now/";
+var target_url1 = "https://www.disquisitioner.com/posts/post-darkmode/";
+
+// jsonp=f option to disable json return
+var count_url   = "https://webmention.io/api/count.json?target=";
+var mention_url = "https://webmention.io/api/mentions.jf2?target=";
+var mfilter = "&wm-property=in-reply-to";
+
+var defaultphoto = "https://aaronparecki.com/assets/images/no-profile-photo.png"
+
+fetch(count_url+target_url)
+  .then(response => {return(response.text());})
+  .then(myJson => {showCounts(1,JSON.parse(myJson));});
+
+fetch(mention_url+target_url)
+  .then(response => {return(response.text());})
+  .then(myJson => {showMentions(JSON.parse(myJson));});
+
+function showCounts(index, data) {
+  // Add code to hide mention panel if data.count = 0
+  if(data.type.like) { document.getElementById("wm_like"+index).innerHTML = data.type.like; }
+  if(data.type.mention) { document.getElementById("wm_ment"+index).innerHTML = data.type.mention; }
+  if(data.type.reply) { 
+      document.getElementById("wm_reply"+index).innerHTML = 
+        pluralize(data.type.reply,"reply","replies");
+  }
+  if(data.type.repost) { 
+    document.getElementById("wm_repost"+index).innerHTML = 
+      pluralize(data.type.repost,"repost","reposts"); 
+  }
+  if(data.type.bookmark) { document.getElementById("wm_bkmk"+index).innerHTML = data.type.bookmark; }
+}
+
+function pluralize(num,singular,plural) {
+  if(num == 1) return num + " " + singular;
+  return num + " " + plural;
+}
+
+function showMentions(mentions) {
+  var panel = document.getElementById("mentionpanel");
+  for(i=0;i<mentions.children.length;i++) {
+
+    var m = mentions.children[i];
+    
+    var m_div = document.createElement("DIV");
+    m_div.className = "webmention";
+    panel.appendChild(m_div);
+
+    var m_img = document.createElement("IMG");
+    if(m.author.photo) {
+      m_img.setAttribute("src",m.author.photo);
+    }
+    else {
+      m_img.setAttribute("src",defaultphoto);
+    }
+    m_img.setAttribute("width","64");
+    m_div.appendChild(m_img);
+
+    var m_info = document.createElement("DIV");
+    m_info.className = "wm_info";
+    m_div.appendChild(m_info);
+
+    // First line is author's name, liked to author's web site if present
+    if(m.author.url) {
+      var m_auth = document.createElement("A");
+      m_auth.href = m.author.url;
+      if(m.author.name) {
+        m_auth.innerHTML = m.author.name;
+      }
+      m_auth.className = "m_author";
+      m_info.appendChild(m_auth);
+
+    }
+    else {
+      if(m.author.name) {
+        var m_auth = document.createElement("SPAN");
+        m_auth.innerHTML = m.author.name;
+        m_auth.className = "m_author";
+        m_info.appendChild(m_auth);
+      }
+    }
+    
+    // Second line = name of post linked to post URL, though
+    // if no name then is just URL
+    var m_art = document.createElement("A");
+    m_art.href = m.url;
+    if(m.name) {
+      m_art.innerHTML = m.name;
+    }
+    else {
+      m_art.innerHTML = m.url;
+    }
+    m_info.appendChild(m_art);
+
+    if(m.published) {
+      var d = new Date(m.published);
+      var m_pub = document.createElement("TIME");
+      m_pub.datetime = m.published;
+      m_pub.innerHTML = "Published: " + d.toString();
+      m_pub.className = "m_published";
+      m_info.appendChild(m_pub);     
+    }
+  }
+}
+</script>
+
+<div class="wm_summary bg-washed-green">
+
+  <ul class="menicons center bg-washed-green">
+    <li class="micon center"><i class="material-icons">star_border</i><span id="wm_like1"></span>&nbsp;likes</li>
+    <li class="micon center"><i class="material-icons-outlined">description</i><span id="wm_ment1"></span>&nbsp;mentions</li>
+
+    <li class="micon center"><i class="material-icons">chat_bubble_outline</i><span id="wm_reply1"></span></li>
+
+    <li class="micon center"><i class="material-icons">repeat</i><span id="wm_repost1"></span></li>
+
+    <li class="micon center"><i class="material-icons">bookmark_border</i><span id="wm_bkmk1"></span>&nbsp;bookmarks</li>
+
+</div>
+<hr>
+<div id="mentionpanel"></div>
+
+<br>
+
+
+
+<footer class="pv4 ph3 ph5-m ph6-l mid-gray">
+  <small class="f6 db tc">© 2023 <b class="ttu"><a href="https://pabs.tech">Pabs Tech, LLC</a></b>., All Rights Reserved</small>
+  <div class="tc mt3">
+    <a href="/" title="Home" class="f6 dib ph2 link mid-gray dim">Home</a>
+    <a href="/cookie-policy"    title="Cookies" class="f6 dib ph2 link mid-gray dim">Cookies</a>
+    <a href="/privacy"  title="Privacy" class="f6 dib ph2 link mid-gray dim">Privacy</a>
+<div id="wcb" class="carbonbadge"></div>
+<script src="https://unpkg.com/website-carbon-badges@1.1.3/b.min.js" defer type="59af9ddac99f86c35438fd7f-text/javascript"></script>
+  </div>
+</footer>
+
+
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="59af9ddac99f86c35438fd7f-|49" defer></script><script>(function(){var js = "window['__CF$cv$params']={r:'7f90b3a09e409830',t:'MTY5MjQzMDMzNi4xODcwMDA='};_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='/cdn-cgi/challenge-platform/scripts/invisible.js',document.getElementsByTagName('head')[0].appendChild(_cpo);";var _0xh = document.createElement('iframe');_0xh.height = 1;_0xh.width = 1;_0xh.style.position = 'absolute';_0xh.style.top = 0;_0xh.style.left = 0;_0xh.style.border = 'none';_0xh.style.visibility = 'hidden';document.body.appendChild(_0xh);function handler() {var _0xi = _0xh.contentDocument || _0xh.contentWindow.document;if (_0xi) {var _0xj = _0xi.createElement('script');_0xj.innerHTML = js;_0xi.getElementsByTagName('head')[0].appendChild(_0xj);}}if (document.readyState !== 'loading') {handler();} else if (window.addEventListener) {document.addEventListener('DOMContentLoaded', handler);} else {var prev = document.onreadystatechange || function () {};document.onreadystatechange = function (e) {prev(e);if (document.readyState !== 'loading') {document.onreadystatechange = prev;handler();}};}})();</script></body>
+
+</html>
